@@ -1,0 +1,78 @@
+<div class="converter">
+    <h2>💱 AI Currency Converter</h2>
+    <p class="subtitle">Supports 161+ currencies worldwide</p>
+    
+    <!-- Quick Convert Buttons -->
+    <div class="quick-convert">
+      <h3>Quick Convert:</h3>
+      <div class="quick-buttons">
+        <button (click)="quickConvert(100, 'USD', 'INR')">$100 → ₹</button>
+        <button (click)="quickConvert(100, 'EUR', 'USD')">€100 → $</button>
+        <button (click)="quickConvert(100, 'GBP', 'EUR')">£100 → €</button>
+        <button (click)="quickConvert(10000, 'JPY', 'USD')">¥10,000 → $</button>
+      </div>
+    </div>
+  
+    <!-- Examples -->
+    <div class="examples">
+      <p>Or try these examples:</p>
+      <div class="example-buttons">
+        <button 
+          *ngFor="let example of examples" 
+          (click)="useExample(example)"
+          class="example-btn"
+        >
+          {{ example }}
+        </button>
+      </div>
+    </div>
+  
+    <!-- Main Input -->
+    <div class="input-group">
+      <input
+        type="text"
+        [(ngModel)]="userQuery"
+        placeholder="e.g. Convert 100 USD to INR, or 50 euros in Japanese yen"
+        (keyup.enter)="handleConvert()"
+        [disabled]="loading"
+        class="query-input"
+      />
+  
+      <button 
+        (click)="handleConvert()" 
+        [disabled]="loading || !userQuery.trim()"
+        class="convert-btn"
+      >
+        {{ loading ? '🔄 Converting...' : '💱 Convert' }}
+      </button>
+    </div>
+  
+    <!-- Popular Currencies -->
+    <div *ngIf="userQuery.trim() && !loading" class="popular-currencies">
+      <p>Convert to popular currencies:</p>
+      <div class="currency-buttons">
+        <button 
+          *ngFor="let currency of popularCurrencies" 
+          (click)="convertToMultiple(currency)"
+          class="currency-btn"
+        >
+          {{ currency }}
+        </button>
+      </div>
+    </div>
+  
+    <!-- Results -->
+    <div *ngIf="result" class="result success">
+      <h3>{{ result }}</h3>
+      <p class="rate-info">{{ detailedResult }}</p>
+    </div>
+  
+    <div *ngIf="error" class="result error">
+      {{ error }}
+    </div>
+  
+    <!-- Supported Currencies Info -->
+    <div class="info">
+      <p>💡 <strong>Supported currencies include:</strong> USD, EUR, GBP, JPY, INR, CAD, AUD, CHF, CNY, SGD, NZD, MXN, BRL, RUB, ZAR, AED, SAR, TRY, KRW and 140+ more!</p>
+    </div>
+  </div>
