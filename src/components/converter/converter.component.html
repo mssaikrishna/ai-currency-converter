@@ -1,78 +1,139 @@
 <div class="converter">
-    <h2>💱 AI Currency Converter</h2>
-    <p class="subtitle">Supports 161+ currencies worldwide</p>
-    
-    <!-- Quick Convert Buttons -->
-    <div class="quick-convert">
-      <h3>Quick Convert:</h3>
-      <div class="quick-buttons">
-        <button (click)="quickConvert(100, 'USD', 'INR')">$100 → ₹</button>
-        <button (click)="quickConvert(100, 'EUR', 'USD')">€100 → $</button>
-        <button (click)="quickConvert(100, 'GBP', 'EUR')">£100 → €</button>
-        <button (click)="quickConvert(10000, 'JPY', 'USD')">¥10,000 → $</button>
-      </div>
-    </div>
-  
-    <!-- Examples -->
-    <div class="examples">
-      <p>Or try these examples:</p>
-      <div class="example-buttons">
-        <button 
-          *ngFor="let example of examples" 
-          (click)="useExample(example)"
-          class="example-btn"
-        >
-          {{ example }}
-        </button>
-      </div>
-    </div>
-  
-    <!-- Main Input -->
-    <div class="input-group">
-      <input
-        type="text"
-        [(ngModel)]="userQuery"
-        placeholder="e.g. Convert 100 USD to INR, or 50 euros in Japanese yen"
-        (keyup.enter)="handleConvert()"
-        [disabled]="loading"
-        class="query-input"
-      />
-  
-      <button 
-        (click)="handleConvert()" 
-        [disabled]="loading || !userQuery.trim()"
-        class="convert-btn"
-      >
-        {{ loading ? '🔄 Converting...' : '💱 Convert' }}
-      </button>
-    </div>
-  
-    <!-- Popular Currencies -->
-    <div *ngIf="userQuery.trim() && !loading" class="popular-currencies">
-      <p>Convert to popular currencies:</p>
-      <div class="currency-buttons">
-        <button 
-          *ngFor="let currency of popularCurrencies" 
-          (click)="convertToMultiple(currency)"
-          class="currency-btn"
-        >
-          {{ currency }}
-        </button>
-      </div>
-    </div>
-  
-    <!-- Results -->
-    <div *ngIf="result" class="result success">
-      <h3>{{ result }}</h3>
-      <p class="rate-info">{{ detailedResult }}</p>
-    </div>
-  
-    <div *ngIf="error" class="result error">
-      {{ error }}
-    </div>
-  
-    <!-- Supported Currencies Info -->
-    <div class="info">
-      <p>💡 <strong>Supported currencies include:</strong> USD, EUR, GBP, JPY, INR, CAD, AUD, CHF, CNY, SGD, NZD, MXN, BRL, RUB, ZAR, AED, SAR, TRY, KRW and 140+ more!</p>
+  <h2>💱 AI Currency Converter</h2>
+  <p class="subtitle">Supports 161+ currencies worldwide</p>
+
+  <!-- Quick Convert Buttons -->
+  <div class="quick-convert">
+    <h3>Quick Convert:</h3>
+    <div class="quick-buttons">
+      <button (click)="quickConvert(100, 'USD', 'INR')">$100 → ₹</button>
+      <button (click)="quickConvert(100, 'EUR', 'USD')">€100 → $</button>
+      <button (click)="quickConvert(100, 'GBP', 'EUR')">£100 → €</button>
+      <button (click)="quickConvert(10000, 'JPY', 'USD')">¥10,000 → $</button>
     </div>
   </div>
+
+  <!-- Examples -->
+  <div class="examples">
+    <p>Or try these examples:</p>
+    <div class="example-buttons">
+      <button *ngFor="let example of examples" (click)="useExample(example)" class="example-btn">
+        {{ example }}
+      </button>
+    </div>
+  </div>
+
+  <!-- Main Input -->
+  <div class="input-group">
+    <input type="text" [(ngModel)]="userQuery" placeholder="e.g. Convert 100 USD to INR, or 50 euros in Japanese yen"
+      (keyup.enter)="handleConvert()" [disabled]="loading" class="query-input" />
+
+    <button (click)="handleConvert()" [disabled]="loading || !userQuery.trim()" class="convert-btn">
+      {{ loading ? '🔄 Converting...' : '💱 Convert' }}
+    </button>
+  </div>
+
+  <!-- Action Buttons - MOVE THIS UP -->
+  <div class="action-buttons" *ngIf="userQuery.trim() && !loading">
+    <button (click)="convertToAllPopular()" class="action-btn" [disabled]="loading">
+      🔄 Convert to All Popular
+    </button>
+    <button (click)="toggleCalculator()" class="action-btn">
+      🧮 {{ showCalculator ? 'Close' : 'Open' }} Calculator
+    </button>
+    <button (click)="showHistoricalChart(parsed?.from || 'USD', parsed?.to || 'EUR')" 
+            class="action-btn" 
+            *ngIf="parsed">
+      📈 View History
+    </button>
+  </div>
+
+  <!-- Favorites Section -->
+  <div class="favorites-section" *ngIf="favorites.length > 0 && userQuery.trim()">
+    <h3>⭐ Your Favorites</h3>
+    <div class="favorite-buttons">
+      <button *ngFor="let fav of favorites" (click)="convertToMultiple(fav)" class="favorite-btn">
+        {{ currencyInfo[fav].flag }} {{ fav }}
+      </button>
+    </div>
+  </div>
+
+  <!-- Popular Currencies -->
+  <div *ngIf="userQuery.trim() && !loading" class="popular-currencies">
+    <p>Convert to popular currencies:</p>
+    <div class="currency-buttons">
+      <button *ngFor="let currency of popularCurrencies" (click)="convertToMultiple(currency)" class="currency-btn">
+        {{ currency }}
+      </button>
+    </div>
+  </div>
+
+  <!-- Currency Calculator -->
+  <div *ngIf="showCalculator" class="calculator">
+    <h3>🧮 Currency Calculator</h3>
+    <div class="calculator-inputs">
+      <input type="number" [(ngModel)]="calculatorFromAmount" (input)="updateCalculator()" class="calc-input">
+      <select [(ngModel)]="calculatorFromCurrency" (change)="updateCalculator()" class="calc-select">
+        <option *ngFor="let curr of popularCurrencies" [value]="curr">{{ curr }}</option>
+      </select>
+      <button (click)="swapCalculatorCurrencies()" class="swap-btn">⇄</button>
+      <input type="number" [(ngModel)]="calculatorToAmount" readonly class="calc-input">
+      <select [(ngModel)]="calculatorToCurrency" (change)="updateCalculator()" class="calc-select">
+        <option *ngFor="let curr of popularCurrencies" [value]="curr">{{ curr }}</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Results -->
+  <div *ngIf="result" class="result success">
+    <h3>{{ result }}</h3>
+    <p class="rate-info">{{ detailedResult }}</p>
+  </div>
+
+  <!-- Multiple Results Table -->
+  <div *ngIf="multipleResults.length > 0" class="results-table">
+    <h3>💱 All Popular Conversions</h3>
+    <table>
+      <tr *ngFor="let result of multipleResults">
+        <td><strong>{{ result.currency }}</strong> ({{ result.name }})</td>
+        <td><strong>{{ result.converted.toFixed(2) }}</strong></td>
+        <td class="rate">1 {{ parsed?.from }} = {{ result.rate.toFixed(4) }} {{ result.currency }}</td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- Historical Chart -->
+  <div *ngIf="showChart" class="chart-section">
+    <h3>📈 Exchange Rate History (30 days)</h3>
+    <div class="chart-placeholder">
+      <p>📊 Chart would display here with data points</p>
+      <div class="historical-data" *ngIf="historicalData">
+        <p>Latest rate: <strong>1 {{ parsed?.from }} = {{ historicalData[historicalData.length-1]?.rate }} {{ parsed?.to }}</strong></p>
+        <p>30-day range: {{ historicalData[0]?.rate }} - {{ historicalData[historicalData.length-1]?.rate }}</p>
+      </div>
+    </div>
+    <button (click)="showChart = false" class="close-btn">Close Chart</button>
+  </div>
+
+  <!-- Currency Information -->
+  <div *ngIf="parsed" class="currency-info">
+    <h4>ℹ️ Currency Information</h4>
+    <p>
+      {{ currencyInfo[parsed.from].flag }}
+      1 {{ parsed.from }} ({{ currencyInfo[parsed.from].name }})
+      =
+      {{ currencyInfo[parsed.to].flag }}
+      {{ currentRate.toFixed(4) }} {{ parsed.to }} ({{ currencyInfo[parsed.to].name }})
+    </p>
+  </div>
+
+  <div *ngIf="error" class="result error">
+    {{ error }}
+  </div>
+
+  <!-- Supported Currencies Info -->
+  <div class="info">
+    <p>💡 <strong>Supported currencies include:</strong> USD, EUR, GBP, JPY, INR, CAD, AUD, CHF, CNY, SGD, NZD, MXN,
+      BRL, RUB, ZAR, AED, SAR, TRY, KRW and 140+ more!</p>
+  </div>
+</div>

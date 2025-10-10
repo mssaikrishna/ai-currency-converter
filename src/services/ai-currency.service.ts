@@ -7,13 +7,21 @@ import { firstValueFrom } from 'rxjs';
 })
 export class AiCurrencyService {
   private GEMINI_API_KEY = 'AIzaSyDeKLbDDCYNkzEiM2vNTsaC7PAZlNhiIMM';
-  
-  // Using ExchangeRate-API - supports 161 currencies, free tier
   private CURRENCY_API_URL = 'https://api.exchangerate-api.com/v4/latest';
-  
   private GEMINI_MODEL = 'gemini-2.0-flash';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
+
+  // Helper methods
+  private getCurrentDate(): string {
+    return new Date().toISOString().split('T')[0];
+  }
+
+  private getPastDate(days: number): string {
+    const date = new Date();
+    date.setDate(date.getDate() - days);
+    return date.toISOString().split('T')[0];
+  }
 
   // Step 1: Use Gemini to interpret user text
   async interpretQuery(query: string): Promise<{ amount: number; from: string; to: string }> {
@@ -58,14 +66,14 @@ export class AiCurrencyService {
       );
 
       const text = res?.candidates?.[0]?.content?.parts?.[0]?.text?.trim();
-      
+
       if (!text) {
         throw new Error('No response from Gemini AI');
       }
 
       const cleanText = text.replace(/```json\s*|\s*```/g, '');
       const parsed = JSON.parse(cleanText);
-      
+
       if (!parsed.from || !parsed.to) {
         throw new Error('Could not detect currencies. Please specify both source and target currencies.');
       }
@@ -82,33 +90,26 @@ export class AiCurrencyService {
     }
   }
 
-  // Step 2: Fetch live conversion from ExchangeRate-API (supports 161 currencies)
-  async getConversion(from: string, to: string, amount: number): Promise<{converted: number, rate: number}> {
+  // Step 2: Fetch live conversion
+  async getConversion(from: string, to: string, amount: number): Promise<{ converted: number, rate: number }> {
     try {
       const url = `${this.CURRENCY_API_URL}/${from}`;
       const res: any = await firstValueFrom(this.http.get(url));
-      
-      console.log('Currency API Response:', res);
-      
+
       if (!res.rates || !res.rates[to]) {
         throw new Error(`Conversion from ${from} to ${to} not supported. Try common currencies like USD, EUR, GBP, JPY, INR, etc.`);
       }
-      
+
       const rate = res.rates[to];
       const converted = amount * rate;
-      
+
       return {
         converted: converted,
         rate: rate
       };
-      
+
     } catch (error: any) {
       console.error('Error converting currency:', error);
-      
-      if (error.status === 404) {
-        throw new Error(`Currency ${from} not found. Please check the currency code.`);
-      }
-      
       throw new Error(`Failed to convert ${from} to ${to}. Please try again.`);
     }
   }
@@ -116,5 +117,60 @@ export class AiCurrencyService {
   // Get popular currencies for display
   getPopularCurrencies(): string[] {
     return ['USD', 'EUR', 'GBP', 'JPY', 'INR', 'CAD', 'AUD', 'CHF', 'CNY', 'SGD', 'NZD', 'MXN', 'BRL', 'RUB', 'ZAR', 'AED', 'SAR', 'TRY', 'KRW'];
+  }
+
+  // Historical rates with fallback to mock data
+  async getHistoricalRates(base: string, target: string, days: number = 7): Promise<any[]> {
+    try {
+      // Using a free historical API
+      const url = `https://api.frankfurter.app/${this.getPastDate(days)}..${this.getCurrentDate()}?from=${base}&to=${target}`;
+      const res: any = await firstValueFrom(this.http.get(url));
+      
+      const rates = [];
+      for (const [date, rateData] of Object.entries(res.rates)) {
+        rates.push({
+          date: date,
+          rate: (rateData as any)[target]
+        });
+      }
+      
+      return rates.sort((a, b) => a.date.localeCompare(b.date));
+      
+    } catch (error) {
+      console.error('Error fetching historical rates, using mock data:', error);
+      return this.generateMockHistoricalData(base, target, days);
+    }
+  }
+
+  // Generate mock historical data
+  private generateMockHistoricalData(base: string, target: string, days: number): any[] {
+    const rates = [];
+    const baseRate = this.getBaseRate(base, target);
+    
+    for (let i = days; i >= 0; i--) {
+      const date = new Date();
+      date.setDate(date.getDate() - i);
+      const dateStr = date.toISOString().split('T')[0];
+      
+      const variation = (Math.random() - 0.5) * 0.1;
+      const rate = baseRate * (1 + variation);
+      
+      rates.push({
+        date: dateStr,
+        rate: parseFloat(rate.toFixed(4))
+      });
+    }
+    
+    return rates;
+  }
+
+  private getBaseRate(from: string, to: string): number {
+    const commonRates: any = {
+      'USD_EUR': 0.85, 'USD_GBP': 0.73, 'USD_INR': 83.0, 'USD_JPY': 110.0,
+      'EUR_USD': 1.18, 'EUR_GBP': 0.86, 'GBP_USD': 1.37, 'GBP_EUR': 1.16,
+      'INR_USD': 0.012, 'JPY_USD': 0.0091
+    };
+    
+    return commonRates[`${from}_${to}`] || 1.0;
   }
 }
