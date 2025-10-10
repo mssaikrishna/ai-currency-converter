@@ -1,4 +1,3 @@
-
 .converter {
   max-width: 2000px;
   margin: 0 auto;
@@ -20,10 +19,10 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: 
-    radial-gradient(circle at 20% 80%, rgba(255,255,255,0.1) 0%, transparent 50%),
-    radial-gradient(circle at 80% 20%, rgba(255,255,255,0.1) 0%, transparent 50%),
-    radial-gradient(circle at 40% 40%, rgba(255,255,255,0.05) 0%, transparent 50%);
+  background:
+    radial-gradient(circle at 20% 80%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 40% 40%, rgba(255, 255, 255, 0.05) 0%, transparent 50%);
   pointer-events: none;
 }
 
@@ -34,7 +33,9 @@
   font-weight: 300;
 }
 
-.quick-convert, .examples, .popular-currencies {
+.quick-convert,
+.examples,
+.popular-currencies {
   margin-bottom: 25px;
   padding: 20px;
   background: rgba(255, 255, 255, 0.95);
@@ -45,19 +46,25 @@
   color: #333;
 }
 
-.quick-convert h3, .examples p, .popular-currencies p {
+.quick-convert h3,
+.examples p,
+.popular-currencies p {
   margin-bottom: 15px;
   font-weight: 600;
   color: #2d3748;
 }
 
-.quick-buttons, .example-buttons, .currency-buttons {
+.quick-buttons,
+.example-buttons,
+.currency-buttons {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
 }
 
-.quick-buttons button, .example-btn, .currency-btn {
+.quick-buttons button,
+.example-btn,
+.currency-btn {
   padding: 10px 16px;
   border: 2px solid #e2e8f0;
   background: white;
@@ -69,7 +76,9 @@
   color: #4a5568;
 }
 
-.quick-buttons button:hover, .example-btn:hover, .currency-btn:hover {
+.quick-buttons button:hover,
+.example-btn:hover,
+.currency-btn:hover {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
   border-color: transparent;
@@ -183,6 +192,7 @@
     opacity: 0;
     transform: translateY(20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -200,21 +210,25 @@
     padding: 20px;
     border-radius: 15px;
   }
-  
+
   .input-group {
     flex-direction: column;
   }
-  
-  .quick-buttons, .example-buttons, .currency-buttons {
+
+  .quick-buttons,
+  .example-buttons,
+  .currency-buttons {
     justify-content: center;
   }
-  
-  .quick-buttons button, .example-btn, .currency-btn {
+
+  .quick-buttons button,
+  .example-btn,
+  .currency-btn {
     flex: 1;
     min-width: 140px;
     text-align: center;
   }
-  
+
   .convert-btn {
     width: 100%;
   }
@@ -222,15 +236,20 @@
 
 /* Floating animation for background elements */
 @keyframes float {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: translateY(0px);
   }
+
   50% {
     transform: translateY(-10px);
   }
 }
 
-.quick-convert, .examples, .popular-currencies {
+.quick-convert,
+.examples,
+.popular-currencies {
   animation: float 6s ease-in-out infinite;
 }
 
@@ -246,219 +265,227 @@
   animation-delay: 4s;
 }
 
-.favorites-section, .results-table, .chart-section, .calculator {
-background: rgba(255, 255, 255, 0.95);
-backdrop-filter: blur(10px);
-border-radius: 15px;
-padding: 20px;
-margin-bottom: 20px;
+.favorites-section,
+.results-table,
+.chart-section,
+.calculator {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: 15px;
+  padding: 20px;
+  margin-bottom: 20px;
 }
 
 .favorite-btn {
-background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
-border: none;
-padding: 10px 15px;
-border-radius: 10px;
-margin: 5px;
-font-weight: bold;
+  background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+  border: none;
+  padding: 10px 15px;
+  border-radius: 10px;
+  margin: 5px;
+  font-weight: bold;
 }
 
 .action-buttons {
-display: flex;
-gap: 10px;
-flex-wrap: wrap;
-margin: 20px 0;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin: 20px 0;
 }
 
 .action-btn {
-background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-color: white;
-border: none;
-padding: 12px 20px;
-border-radius: 10px;
-cursor: pointer;
-flex: 1;
-min-width: 200px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 10px;
+  cursor: pointer;
+  flex: 1;
+  min-width: 200px;
 }
 
 .results-table table {
-width: 100%;
-border-collapse: collapse;
+  width: 100%;
+  border-collapse: collapse;
 }
 
 .results-table td {
-padding: 10px;
-border-bottom: 1px solid #eee;
+  padding: 10px;
+  border-bottom: 1px solid #eee;
 }
 
 /* Fix for white text on white background issues */
-.results-table, .chart-section, .calculator, .favorites-section, .currency-info {
-background: rgba(255, 255, 255, 0.95) !important;
-backdrop-filter: blur(10px);
-border-radius: 15px;
-padding: 20px;
-margin-bottom: 20px;
-border: 1px solid rgba(255, 255, 255, 0.2);
-color: #2d3748 !important; /* Dark text color */
+.results-table,
+.chart-section,
+.calculator,
+.favorites-section,
+.currency-info {
+  background: rgba(255, 255, 255, 0.95) !important;
+  backdrop-filter: blur(10px);
+  border-radius: 15px;
+  padding: 20px;
+  margin-bottom: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #2d3748 !important;
+  /* Dark text color */
 }
 
 /* Ensure all text inside these sections is dark */
 .results-table h3,
-.chart-section h3, 
+.chart-section h3,
 .calculator h3,
 .favorites-section h3,
 .currency-info h4 {
-color: #2d3748 !important;
-margin-bottom: 15px;
+  color: #2d3748 !important;
+  margin-bottom: 15px;
 }
 
 /* Table specific styles */
 .results-table table {
-width: 100%;
-border-collapse: collapse;
-color: #2d3748;
+  width: 100%;
+  border-collapse: collapse;
+  color: #2d3748;
 }
 
 .results-table td {
-padding: 12px;
-border-bottom: 1px solid #e2e8f0;
-color: #2d3748;
+  padding: 12px;
+  border-bottom: 1px solid #e2e8f0;
+  color: #2d3748;
 }
 
 .results-table .rate {
-color: #718096 !important;
-font-size: 0.9em;
+  color: #718096 !important;
+  font-size: 0.9em;
 }
 
 /* Chart section improvements */
 .chart-section {
-color: #2d3748;
+  color: #2d3748;
 }
 
 .chart-placeholder {
-background: #f7fafc;
-padding: 20px;
-border-radius: 10px;
-text-align: center;
-margin: 15px 0;
-color: #4a5568;
-border: 1px solid #e2e8f0;
+  background: #f7fafc;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  margin: 15px 0;
+  color: #4a5568;
+  border: 1px solid #e2e8f0;
 }
 
 .historical-data {
-display: flex;
-justify-content: space-around;
-margin-top: 15px;
-color: #2d3748;
+  display: flex;
+  justify-content: space-around;
+  margin-top: 15px;
+  color: #2d3748;
 }
 
 .historical-data p {
-margin: 0;
-padding: 8px 12px;
-background: #edf2f7;
-border-radius: 6px;
+  margin: 0;
+  padding: 8px 12px;
+  background: #edf2f7;
+  border-radius: 6px;
 }
 
 /* Calculator improvements */
 .calculator-inputs {
-display: flex;
-align-items: center;
-gap: 10px;
-flex-wrap: wrap;
-color: #2d3748;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  color: #2d3748;
 }
 
 .calc-input {
-padding: 10px;
-border: 2px solid #e2e8f0;
-border-radius: 8px;
-width: 100px;
-background: white;
-color: #2d3748;
+  padding: 10px;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  width: 100px;
+  background: white;
+  color: #2d3748;
 }
 
 .calc-select {
-padding: 10px;
-border: 2px solid #e2e8f0;
-border-radius: 8px;
-background: white;
-color: #2d3748;
+  padding: 10px;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  background: white;
+  color: #2d3748;
 }
 
 /* Favorites section */
 .favorite-buttons {
-display: flex;
-flex-wrap: wrap;
-gap: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
 }
 
 .favorite-btn {
-background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
-border: none;
-padding: 10px 15px;
-border-radius: 10px;
-font-weight: bold;
-cursor: pointer;
-color: #2d3748 !important;
-transition: all 0.3s ease;
+  background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+  border: none;
+  padding: 10px 15px;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  color: #2d3748 !important;
+  transition: all 0.3s ease;
 }
 
 .favorite-btn:hover {
-transform: translateY(-2px);
-box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4);
 }
 
 /* Currency information section */
 .currency-info {
-background: rgba(231, 243, 255, 0.95) !important;
-border-radius: 12px;
-padding: 15px;
-margin: 15px 0;
-border-left: 4px solid #4299e1;
-color: #2b6cb0 !important;
+  background: rgba(231, 243, 255, 0.95) !important;
+  border-radius: 12px;
+  padding: 15px;
+  margin: 15px 0;
+  border-left: 4px solid #4299e1;
+  color: #2b6cb0 !important;
 }
 
 .currency-info h4 {
-color: #2b6cb0 !important;
-margin-bottom: 10px;
+  color: #2b6cb0 !important;
+  margin-bottom: 10px;
 }
 
 .currency-info p {
-margin: 0;
-color: #2b6cb0 !important;
-font-size: 1rem;
+  margin: 0;
+  color: #2b6cb0 !important;
+  font-size: 1rem;
 }
 
 /* Close button for chart */
 .close-btn {
-background: #dc3545;
-color: white;
-border: none;
-padding: 10px 20px;
-border-radius: 8px;
-cursor: pointer;
-margin-top: 15px;
+  background: #dc3545;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-top: 15px;
 }
 
 .close-btn:hover {
-background: #c82333;
+  background: #c82333;
 }
 
 /* Swap button for calculator */
 .swap-btn {
-padding: 10px 15px;
-background: #667eea;
-color: white;
-border: none;
-border-radius: 8px;
-cursor: pointer;
-font-size: 1.2rem;
-transition: all 0.3s ease;
+  padding: 10px 15px;
+  background: #667eea;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1.2rem;
+  transition: all 0.3s ease;
 }
 
 .swap-btn:hover {
-background: #5a67d8;
-transform: scale(1.05);
+  background: #5a67d8;
+  transform: scale(1.05);
 }
 
 /* Ensure all text in these sections is visible */
@@ -466,31 +493,100 @@ transform: scale(1.05);
 .chart-section *,
 .calculator *,
 .favorites-section * {
-color: #2d3748 !important;
+  color: #2d3748 !important;
 }
 
 /* Specific fix for the historical data text */
 .historical-data strong {
-color: #2d3748 !important;
+  color: #2d3748 !important;
 }
 
 /* Responsive fixes */
 @media (max-width: 768px) {
-.calculator-inputs {
-  flex-direction: column;
-  align-items: stretch;
-}
+  .calculator-inputs {
+    flex-direction: column;
+    align-items: stretch;
+  }
 
-.calc-input, .calc-select {
+  .calc-input,
+  .calc-select {
+    width: 100%;
+  }
+
+  .historical-data {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .favorite-buttons {
+    justify-content: center;
+  }
+
+  /* Chart Container */
+.chart-container {
+  position: relative;
+  height: 400px;
   width: 100%;
+  margin: 20px 0;
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 10px;
+  padding: 15px;
+  border: 1px solid rgba(226, 232, 240, 0.8);
 }
 
-.historical-data {
+/* Chart Stats */
+.chart-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+  margin: 20px 0;
+  padding: 15px;
+  background: rgba(247, 250, 252, 0.8);
+  border-radius: 10px;
+  border: 1px solid rgba(226, 232, 240, 0.6);
+}
+
+.stat-item {
+  display: flex;
   flex-direction: column;
-  gap: 10px;
+  align-items: center;
+  padding: 10px;
+  background: white;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
 }
 
-.favorite-buttons {
-  justify-content: center;
+.stat-label {
+  font-size: 0.85rem;
+  color: #718096;
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+.stat-value {
+  font-size: 1.1rem;
+  color: #2d3748;
+  font-weight: bold;
+}
+
+/* Responsive chart */
+@media (max-width: 768px) {
+  .chart-container {
+    height: 300px;
+  }
+  
+  .chart-stats {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .chart-container {
+    height: 250px;
+  }
+  
+  .chart-stats {
+    grid-template-columns: 1fr;
+  }
 }
 }

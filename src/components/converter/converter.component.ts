@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { AiCurrencyService } from '../../services/ai-currency.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { Chart, registerables } from 'chart.js';
+Chart.register(...registerables);
 
 @Component({
   selector: 'app-converter',
@@ -28,6 +30,7 @@ export class ConverterComponent {
   historicalData: any = null;
   multipleResults: any[] = [];
   showCalculator = false;
+  chart : any = null;
   
   favorites: string[] = [];
 
@@ -71,6 +74,22 @@ export class ConverterComponent {
   loadFavorites() {
     const saved = localStorage.getItem('favoriteCurrencies');
     this.favorites = saved ? JSON.parse(saved) : ['USD', 'EUR', 'GBP', 'JPY', 'INR'];
+  }
+
+  getMaxRate(): number {
+    if (!this.historicalData) return 0;
+    return Math.max(...this.historicalData.map((item: any) => item.rate));
+  }
+  
+  getMinRate(): number {
+    if (!this.historicalData) return 0;
+    return Math.min(...this.historicalData.map((item: any) => item.rate));
+  }
+  
+  getAverageRate(): number {
+    if (!this.historicalData) return 0;
+    const sum = this.historicalData.reduce((acc: number, item: any) => acc + item.rate, 0);
+    return sum / this.historicalData.length;
   }
 
   async handleConvert() {
@@ -168,17 +187,17 @@ export class ConverterComponent {
   }
 
   // Show historical chart
-  async showHistoricalChart(from: string, to: string) {
-    try {
-      this.loading = true;
-      this.historicalData = await this.aiService.getHistoricalRates(from, to, 30);
-      this.showChart = true;
-    } catch (error) {
-      this.error = 'Could not load historical data';
-    } finally {
-      this.loading = false;
-    }
-  }
+  // async showHistoricalChart(from: string, to: string) {
+  //   try {
+  //     this.loading = true;
+  //     this.historicalData = await this.aiService.getHistoricalRates(from, to, 30);
+  //     this.showChart = true;
+  //   } catch (error) {
+  //     this.error = 'Could not load historical data';
+  //   } finally {
+  //     this.loading = false;
+  //   }
+  // }
 
   // Calculator methods
   toggleCalculator() {
@@ -217,6 +236,123 @@ export class ConverterComponent {
   quickConvert(amount: number, from: string, to: string) {
     this.userQuery = `Convert ${amount} ${from} to ${to}`;
     this.handleConvert();
+  }
+
+  async showHistoricalChart(from: string, to: string) {
+    try {
+      this.loading = true;
+      this.historicalData = await this.aiService.getHistoricalRates(from, to, 30);
+      this.showChart = true;
+      
+      // Wait for the DOM to update then create chart
+      setTimeout(() => {
+        this.createChart();
+      }, 100);
+      
+    } catch (error) {
+      this.error = 'Could not load historical data';
+    } finally {
+      this.loading = false;
+    }
+  }
+
+  createChart() {
+    // Destroy existing chart if it exists
+    if (this.chart) {
+      this.chart.destroy();
+    }
+
+    const ctx = document.getElementById('historyChart') as HTMLCanvasElement;
+    if (!ctx) return;
+
+    const labels = this.historicalData.map((item: any) => {
+      const date = new Date(item.date);
+      return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    });
+
+    const rates = this.historicalData.map((item: any) => item.rate);
+
+    this.chart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: labels,
+        datasets: [{
+          label: `${this.parsed?.from} to ${this.parsed?.to}`,
+          data: rates,
+          borderColor: '#667eea',
+          backgroundColor: 'rgba(102, 126, 234, 0.1)',
+          borderWidth: 3,
+          fill: true,
+          tension: 0.4,
+          pointBackgroundColor: '#667eea',
+          pointBorderColor: '#ffffff',
+          pointBorderWidth: 2,
+          pointRadius: 4,
+          pointHoverRadius: 6
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            display: true,
+            position: 'top',
+            labels: {
+              color: '#2d3748',
+              font: {
+                size: 14,
+                weight: 'bold'
+              }
+            }
+          },
+          tooltip: {
+            backgroundColor: 'rgba(255, 255, 255, 0.95)',
+            titleColor: '#2d3748',
+            bodyColor: '#2d3748',
+            borderColor: '#e2e8f0',
+            borderWidth: 1,
+            displayColors: false,
+            callbacks: {
+              label: function(context : any) {
+                return `Rate: ${context.parsed.y.toFixed(4)}`;
+              }
+            }
+          }
+        },
+        scales: {
+          x: {
+            grid: {
+              color: 'rgba(226, 232, 240, 0.5)'
+            },
+            ticks: {
+              color: '#718096',
+              maxTicksLimit: 8
+            }
+          },
+          y: {
+            grid: {
+              color: 'rgba(226, 232, 240, 0.5)'
+            },
+            ticks: {
+              color: '#718096',
+              callback: function(value : any) {
+                return value.toFixed(3);
+              }
+            }
+          }
+        }
+      }
+    });
+  }
+
+  // Update the method that closes the chart to also destroy it
+  closeChart() {
+    this.showChart = false;
+    if (this.chart) {
+      this.chart.destroy();
+      this.chart = null;
+    }
   }
 
 }
