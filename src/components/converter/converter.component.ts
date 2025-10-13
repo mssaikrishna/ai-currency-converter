@@ -118,7 +118,7 @@ export class ConverterComponent {
     if (!this.userQuery.trim()) return;
     
     this.error = '';
-    this.loading = true;
+    // this.loading = true;
 
     try {
       // If we haven't parsed yet, parse the query first
