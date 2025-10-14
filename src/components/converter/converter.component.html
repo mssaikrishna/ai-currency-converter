@@ -1,5 +1,5 @@
 <div class="converter">
-  <h2>💱 AI Currency Converter</h2>
+  <h2>💱 Currency Converter</h2>
   <p class="subtitle">Supports 161+ currencies worldwide</p>
 
   <!-- Quick Convert Buttons -->
@@ -262,24 +262,31 @@
   <!-- Historical Chart -->
   <div *ngIf="showChart" class="chart-section">
     <h3>📈 Exchange Rate History (30 days)</h3>
-    <div class="chart-placeholder">
-      <p>📊 Chart would display here with data points</p>
-      <div class="historical-data" *ngIf="historicalData">
-        <p>
-          Latest rate:
-          <strong
-            >1 {{ parsed?.from }} =
-            {{ historicalData[historicalData.length - 1]?.rate }}
-            {{ parsed?.to }}</strong
-          >
-        </p>
-        <p>
-          30-day range: {{ historicalData[0]?.rate }} -
-          {{ historicalData[historicalData.length - 1]?.rate }}
-        </p>
+    
+    <div class="chart-container">
+      <canvas id="historyChart"></canvas>
+    </div>
+    
+    <div class="chart-stats" *ngIf="historicalData">
+      <div class="stat-item">
+        <span class="stat-label">Current Rate:</span>
+        <span class="stat-value">1 {{ parsed?.from }} = {{ historicalData[historicalData.length-1]?.rate.toFixed(4) }} {{ parsed?.to }}</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-label">30-Day High:</span>
+        <span class="stat-value">{{ getMaxRate().toFixed(4) }}</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-label">30-Day Low:</span>
+        <span class="stat-value">{{ getMinRate().toFixed(4) }}</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-label">Average Rate:</span>
+        <span class="stat-value">{{ getAverageRate().toFixed(4) }}</span>
       </div>
     </div>
-    <button (click)="showChart = false" class="close-btn">Close Chart</button>
+    
+    <button (click)="closeChart()" class="close-btn">Close Chart</button>
   </div>
 
   <!-- Currency Information -->

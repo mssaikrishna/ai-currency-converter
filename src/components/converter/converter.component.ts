@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { AiCurrencyService } from '../../services/ai-currency.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { Chart, registerables } from 'chart.js';
+Chart.register(...registerables);
 
 @Component({
   selector: 'app-converter',
@@ -28,7 +30,8 @@ export class ConverterComponent {
   historicalData: any = null;
   multipleResults: any[] = [];
   showCalculator = false;
-
+  chart : any = null;
+  
   favorites: string[] = [];
 
   showFees = false;
@@ -79,99 +82,23 @@ export class ConverterComponent {
 
   loadFavorites() {
     const saved = localStorage.getItem('favoriteCurrencies');
-    this.favorites = saved
-      ? JSON.parse(saved)
-      : ['USD', 'EUR', 'GBP', 'JPY', 'INR'];
+    this.favorites = saved ? JSON.parse(saved) : ['USD', 'EUR', 'GBP', 'JPY', 'INR'];
   }
 
-  async handleConvertWithFees() {
-    this.result = '';
-    this.detailedResult = '';
-    this.error = '';
-    this.loading = true;
-    this.feeConversionResult = null;
-    await this.handleConvertWithFees();
-
-    try {
-      this.parsed = await this.aiService.interpretQuery(this.userQuery);
-
-      if (this.showFees) {
-        // Use fee-based conversion
-        this.feeConversionResult = await this.aiService.getConversionWithFees(
-          this.parsed.from,
-          this.parsed.to,
-          this.parsed.amount,
-          this.feePercentage
-        );
-
-        this.currentRate = this.feeConversionResult.rate;
-        this.result = `${this.parsed.amount} ${
-          this.parsed.from
-        } = ${this.feeConversionResult.netAmount.toFixed(2)} ${this.parsed.to}`;
-        this.detailedResult = `After ${
-          this.feePercentage
-        }% fee (${this.feeConversionResult.feeAmount.toFixed(2)} ${
-          this.parsed.to
-        })`;
-      } else {
-        // Use regular conversion (no fees)
-        const conversion = await this.aiService.getConversion(
-          this.parsed.from,
-          this.parsed.to,
-          this.parsed.amount
-        );
-        this.currentRate = conversion.rate;
-        this.result = `${this.parsed.amount} ${
-          this.parsed.from
-        } = ${conversion.converted.toFixed(2)} ${this.parsed.to}`;
-        this.detailedResult = `Exchange rate: 1 ${
-          this.parsed.from
-        } = ${conversion.rate.toFixed(4)} ${this.parsed.to}`;
-      }
-    } catch (err: any) {
-      console.error(err);
-      this.error =
-        err.message || 'Sorry, something went wrong. Please try again.';
-    } finally {
-      this.loading = false;
-    }
+  getMaxRate(): number {
+    if (!this.historicalData) return 0;
+    return Math.max(...this.historicalData.map((item: any) => item.rate));
   }
-  // Add this getter method to your component class
-  get feeStructureKeys(): string[] {
-    return Object.keys(this.feeStructures);
+  
+  getMinRate(): number {
+    if (!this.historicalData) return 0;
+    return Math.min(...this.historicalData.map((item: any) => item.rate));
   }
-
-  // Add to ConverterComponent class
-  calculateServiceAmount(service: string): string {
-    if (!this.feeConversionResult || !this.parsed) return '0.00';
-
-    const serviceFee = this.feeStructures[service];
-    const serviceFeeAmount =
-      this.feeConversionResult.converted * (serviceFee / 100);
-    const serviceNetAmount =
-      this.feeConversionResult.converted - serviceFeeAmount;
-
-    return this.formatCurrency(serviceNetAmount, this.parsed.to);
-  }
-
-  formatCurrency(amount: number, currency: string): string {
-    return new Intl.NumberFormat('en-US', {
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
-    }).format(amount);
-  }
-
-  // Toggle fee display
-  toggleFees() {
-    this.showFees = !this.showFees;
-    this.feeConversionResult = null;
-    this.result = '';
-    this.detailedResult = '';
-  }
-
-  // Update fee percentage based on selected type
-  onFeeTypeChange() {
-    this.feePercentage = this.feeStructures[this.selectedFeeType];
+  
+  getAverageRate(): number {
+    if (!this.historicalData) return 0;
+    const sum = this.historicalData.reduce((acc: number, item: any) => acc + item.rate, 0);
+    return sum / this.historicalData.length;
   }
 
   async handleConvert() {
@@ -208,7 +135,7 @@ export class ConverterComponent {
     if (!this.userQuery.trim()) return;
 
     this.error = '';
-    this.loading = true;
+    // this.loading = true;
 
     try {
       // If we haven't parsed yet, parse the query first
@@ -287,21 +214,17 @@ export class ConverterComponent {
   }
 
   // Show historical chart
-  async showHistoricalChart(from: string, to: string) {
-    try {
-      this.loading = true;
-      this.historicalData = await this.aiService.getHistoricalRates(
-        from,
-        to,
-        30
-      );
-      this.showChart = true;
-    } catch (error) {
-      this.error = 'Could not load historical data';
-    } finally {
-      this.loading = false;
-    }
-  }
+  // async showHistoricalChart(from: string, to: string) {
+  //   try {
+  //     this.loading = true;
+  //     this.historicalData = await this.aiService.getHistoricalRates(from, to, 30);
+  //     this.showChart = true;
+  //   } catch (error) {
+  //     this.error = 'Could not load historical data';
+  //   } finally {
+  //     this.loading = false;
+  //   }
+  // }
 
   // Calculator methods
   toggleCalculator() {
@@ -345,4 +268,122 @@ export class ConverterComponent {
     this.userQuery = `Convert ${amount} ${from} to ${to}`;
     this.handleConvert();
   }
+
+  async showHistoricalChart(from: string, to: string) {
+    try {
+      this.loading = true;
+      this.historicalData = await this.aiService.getHistoricalRates(from, to, 30);
+      this.showChart = true;
+      
+      // Wait for the DOM to update then create chart
+      setTimeout(() => {
+        this.createChart();
+      }, 100);
+      
+    } catch (error) {
+      this.error = 'Could not load historical data';
+    } finally {
+      this.loading = false;
+    }
+  }
+
+  createChart() {
+    // Destroy existing chart if it exists
+    if (this.chart) {
+      this.chart.destroy();
+    }
+
+    const ctx = document.getElementById('historyChart') as HTMLCanvasElement;
+    if (!ctx) return;
+
+    const labels = this.historicalData.map((item: any) => {
+      const date = new Date(item.date);
+      return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    });
+
+    const rates = this.historicalData.map((item: any) => item.rate);
+
+    this.chart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: labels,
+        datasets: [{
+          label: `${this.parsed?.from} to ${this.parsed?.to}`,
+          data: rates,
+          borderColor: '#667eea',
+          backgroundColor: 'rgba(102, 126, 234, 0.1)',
+          borderWidth: 3,
+          fill: true,
+          tension: 0.4,
+          pointBackgroundColor: '#667eea',
+          pointBorderColor: '#ffffff',
+          pointBorderWidth: 2,
+          pointRadius: 4,
+          pointHoverRadius: 6
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            display: true,
+            position: 'top',
+            labels: {
+              color: '#2d3748',
+              font: {
+                size: 14,
+                weight: 'bold'
+              }
+            }
+          },
+          tooltip: {
+            backgroundColor: 'rgba(255, 255, 255, 0.95)',
+            titleColor: '#2d3748',
+            bodyColor: '#2d3748',
+            borderColor: '#e2e8f0',
+            borderWidth: 1,
+            displayColors: false,
+            callbacks: {
+              label: function(context : any) {
+                return `Rate: ${context.parsed.y.toFixed(4)}`;
+              }
+            }
+          }
+        },
+        scales: {
+          x: {
+            grid: {
+              color: 'rgba(226, 232, 240, 0.5)'
+            },
+            ticks: {
+              color: '#718096',
+              maxTicksLimit: 8
+            }
+          },
+          y: {
+            grid: {
+              color: 'rgba(226, 232, 240, 0.5)'
+            },
+            ticks: {
+              color: '#718096',
+              callback: function(value : any) {
+                return value.toFixed(3);
+              }
+            }
+          }
+        }
+      }
+    });
+  }
+
+  // Update the method that closes the chart to also destroy it
+  closeChart() {
+    this.showChart = false;
+    if (this.chart) {
+      this.chart.destroy();
+      this.chart = null;
+    }
+  }
+
 }
