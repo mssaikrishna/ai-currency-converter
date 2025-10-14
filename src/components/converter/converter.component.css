@@ -1,9 +1,8 @@
-
 .converter {
   max-width: 2000px;
   margin: 0 auto;
   padding: 30px;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   background: linear-gradient(135deg, #f97316 0%, #dc2626 100%);
   border-radius: 20px;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
@@ -14,16 +13,27 @@
 
 /* Add a subtle pattern overlay */
 .converter::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: 
-    radial-gradient(circle at 20% 80%, rgba(255,255,255,0.1) 0%, transparent 50%),
-    radial-gradient(circle at 80% 20%, rgba(255,255,255,0.1) 0%, transparent 50%),
-    radial-gradient(circle at 40% 40%, rgba(255,255,255,0.05) 0%, transparent 50%);
+  background: radial-gradient(
+      circle at 20% 80%,
+      rgba(255, 255, 255, 0.1) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      circle at 80% 20%,
+      rgba(255, 255, 255, 0.1) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      circle at 40% 40%,
+      rgba(255, 255, 255, 0.05) 0%,
+      transparent 50%
+    );
   pointer-events: none;
 }
 
@@ -34,7 +44,9 @@
   font-weight: 300;
 }
 
-.quick-convert, .examples, .popular-currencies {
+.quick-convert,
+.examples,
+.popular-currencies {
   margin-bottom: 25px;
   padding: 20px;
   background: rgba(255, 255, 255, 0.95);
@@ -45,19 +57,25 @@
   color: #333;
 }
 
-.quick-convert h3, .examples p, .popular-currencies p {
+.quick-convert h3,
+.examples p,
+.popular-currencies p {
   margin-bottom: 15px;
   font-weight: 600;
   color: #2d3748;
 }
 
-.quick-buttons, .example-buttons, .currency-buttons {
+.quick-buttons,
+.example-buttons,
+.currency-buttons {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
 }
 
-.quick-buttons button, .example-btn, .currency-btn {
+.quick-buttons button,
+.example-btn,
+.currency-btn {
   padding: 10px 16px;
   border: 2px solid #e2e8f0;
   background: white;
@@ -69,7 +87,9 @@
   color: #4a5568;
 }
 
-.quick-buttons button:hover, .example-btn:hover, .currency-btn:hover {
+.quick-buttons button:hover,
+.example-btn:hover,
+.currency-btn:hover {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
   border-color: transparent;
@@ -200,21 +220,25 @@
     padding: 20px;
     border-radius: 15px;
   }
-  
+
   .input-group {
     flex-direction: column;
   }
-  
-  .quick-buttons, .example-buttons, .currency-buttons {
+
+  .quick-buttons,
+  .example-buttons,
+  .currency-buttons {
     justify-content: center;
   }
-  
-  .quick-buttons button, .example-btn, .currency-btn {
+
+  .quick-buttons button,
+  .example-btn,
+  .currency-btn {
     flex: 1;
     min-width: 140px;
     text-align: center;
   }
-  
+
   .convert-btn {
     width: 100%;
   }
@@ -222,7 +246,8 @@
 
 /* Floating animation for background elements */
 @keyframes float {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0px);
   }
   50% {
@@ -230,7 +255,9 @@
   }
 }
 
-.quick-convert, .examples, .popular-currencies {
+.quick-convert,
+.examples,
+.popular-currencies {
   animation: float 6s ease-in-out infinite;
 }
 
@@ -246,219 +273,226 @@
   animation-delay: 4s;
 }
 
-.favorites-section, .results-table, .chart-section, .calculator {
-background: rgba(255, 255, 255, 0.95);
-backdrop-filter: blur(10px);
-border-radius: 15px;
-padding: 20px;
-margin-bottom: 20px;
+.favorites-section,
+.results-table,
+.chart-section,
+.calculator {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: 15px;
+  padding: 20px;
+  margin-bottom: 20px;
 }
 
 .favorite-btn {
-background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
-border: none;
-padding: 10px 15px;
-border-radius: 10px;
-margin: 5px;
-font-weight: bold;
+  background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+  border: none;
+  padding: 10px 15px;
+  border-radius: 10px;
+  margin: 5px;
+  font-weight: bold;
 }
 
 .action-buttons {
-display: flex;
-gap: 10px;
-flex-wrap: wrap;
-margin: 20px 0;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin: 20px 0;
 }
 
 .action-btn {
-background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-color: white;
-border: none;
-padding: 12px 20px;
-border-radius: 10px;
-cursor: pointer;
-flex: 1;
-min-width: 200px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 10px;
+  cursor: pointer;
+  flex: 1;
+  min-width: 200px;
 }
 
 .results-table table {
-width: 100%;
-border-collapse: collapse;
+  width: 100%;
+  border-collapse: collapse;
 }
 
 .results-table td {
-padding: 10px;
-border-bottom: 1px solid #eee;
+  padding: 10px;
+  border-bottom: 1px solid #eee;
 }
 
 /* Fix for white text on white background issues */
-.results-table, .chart-section, .calculator, .favorites-section, .currency-info {
-background: rgba(255, 255, 255, 0.95) !important;
-backdrop-filter: blur(10px);
-border-radius: 15px;
-padding: 20px;
-margin-bottom: 20px;
-border: 1px solid rgba(255, 255, 255, 0.2);
-color: #2d3748 !important; /* Dark text color */
+.results-table,
+.chart-section,
+.calculator,
+.favorites-section,
+.currency-info {
+  background: rgba(255, 255, 255, 0.95) !important;
+  backdrop-filter: blur(10px);
+  border-radius: 15px;
+  padding: 20px;
+  margin-bottom: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #2d3748 !important; /* Dark text color */
 }
 
 /* Ensure all text inside these sections is dark */
 .results-table h3,
-.chart-section h3, 
+.chart-section h3,
 .calculator h3,
 .favorites-section h3,
 .currency-info h4 {
-color: #2d3748 !important;
-margin-bottom: 15px;
+  color: #2d3748 !important;
+  margin-bottom: 15px;
 }
 
 /* Table specific styles */
 .results-table table {
-width: 100%;
-border-collapse: collapse;
-color: #2d3748;
+  width: 100%;
+  border-collapse: collapse;
+  color: #2d3748;
 }
 
 .results-table td {
-padding: 12px;
-border-bottom: 1px solid #e2e8f0;
-color: #2d3748;
+  padding: 12px;
+  border-bottom: 1px solid #e2e8f0;
+  color: #2d3748;
 }
 
 .results-table .rate {
-color: #718096 !important;
-font-size: 0.9em;
+  color: #718096 !important;
+  font-size: 0.9em;
 }
 
 /* Chart section improvements */
 .chart-section {
-color: #2d3748;
+  color: #2d3748;
 }
 
 .chart-placeholder {
-background: #f7fafc;
-padding: 20px;
-border-radius: 10px;
-text-align: center;
-margin: 15px 0;
-color: #4a5568;
-border: 1px solid #e2e8f0;
+  background: #f7fafc;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  margin: 15px 0;
+  color: #4a5568;
+  border: 1px solid #e2e8f0;
 }
 
 .historical-data {
-display: flex;
-justify-content: space-around;
-margin-top: 15px;
-color: #2d3748;
+  display: flex;
+  justify-content: space-around;
+  margin-top: 15px;
+  color: #2d3748;
 }
 
 .historical-data p {
-margin: 0;
-padding: 8px 12px;
-background: #edf2f7;
-border-radius: 6px;
+  margin: 0;
+  padding: 8px 12px;
+  background: #edf2f7;
+  border-radius: 6px;
 }
 
 /* Calculator improvements */
 .calculator-inputs {
-display: flex;
-align-items: center;
-gap: 10px;
-flex-wrap: wrap;
-color: #2d3748;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  color: #2d3748;
 }
 
 .calc-input {
-padding: 10px;
-border: 2px solid #e2e8f0;
-border-radius: 8px;
-width: 100px;
-background: white;
-color: #2d3748;
+  padding: 10px;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  width: 100px;
+  background: white;
+  color: #2d3748;
 }
 
 .calc-select {
-padding: 10px;
-border: 2px solid #e2e8f0;
-border-radius: 8px;
-background: white;
-color: #2d3748;
+  padding: 10px;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  background: white;
+  color: #2d3748;
 }
 
 /* Favorites section */
 .favorite-buttons {
-display: flex;
-flex-wrap: wrap;
-gap: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
 }
 
 .favorite-btn {
-background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
-border: none;
-padding: 10px 15px;
-border-radius: 10px;
-font-weight: bold;
-cursor: pointer;
-color: #2d3748 !important;
-transition: all 0.3s ease;
+  background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+  border: none;
+  padding: 10px 15px;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  color: #2d3748 !important;
+  transition: all 0.3s ease;
 }
 
 .favorite-btn:hover {
-transform: translateY(-2px);
-box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4);
 }
 
 /* Currency information section */
 .currency-info {
-background: rgba(231, 243, 255, 0.95) !important;
-border-radius: 12px;
-padding: 15px;
-margin: 15px 0;
-border-left: 4px solid #4299e1;
-color: #2b6cb0 !important;
+  background: rgba(231, 243, 255, 0.95) !important;
+  border-radius: 12px;
+  padding: 15px;
+  margin: 15px 0;
+  border-left: 4px solid #4299e1;
+  color: #2b6cb0 !important;
 }
 
 .currency-info h4 {
-color: #2b6cb0 !important;
-margin-bottom: 10px;
+  color: #2b6cb0 !important;
+  margin-bottom: 10px;
 }
 
 .currency-info p {
-margin: 0;
-color: #2b6cb0 !important;
-font-size: 1rem;
+  margin: 0;
+  color: #2b6cb0 !important;
+  font-size: 1rem;
 }
 
 /* Close button for chart */
 .close-btn {
-background: #dc3545;
-color: white;
-border: none;
-padding: 10px 20px;
-border-radius: 8px;
-cursor: pointer;
-margin-top: 15px;
+  background: #dc3545;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-top: 15px;
 }
 
 .close-btn:hover {
-background: #c82333;
+  background: #c82333;
 }
 
 /* Swap button for calculator */
 .swap-btn {
-padding: 10px 15px;
-background: #667eea;
-color: white;
-border: none;
-border-radius: 8px;
-cursor: pointer;
-font-size: 1.2rem;
-transition: all 0.3s ease;
+  padding: 10px 15px;
+  background: #667eea;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1.2rem;
+  transition: all 0.3s ease;
 }
 
 .swap-btn:hover {
-background: #5a67d8;
-transform: scale(1.05);
+  background: #5a67d8;
+  transform: scale(1.05);
 }
 
 /* Ensure all text in these sections is visible */
@@ -466,31 +500,269 @@ transform: scale(1.05);
 .chart-section *,
 .calculator *,
 .favorites-section * {
-color: #2d3748 !important;
+  color: #2d3748 !important;
 }
 
 /* Specific fix for the historical data text */
 .historical-data strong {
-color: #2d3748 !important;
+  color: #2d3748 !important;
 }
 
 /* Responsive fixes */
 @media (max-width: 768px) {
-.calculator-inputs {
-  flex-direction: column;
-  align-items: stretch;
-}
+  .calculator-inputs {
+    flex-direction: column;
+    align-items: stretch;
+  }
 
-.calc-input, .calc-select {
-  width: 100%;
-}
+  .calc-input,
+  .calc-select {
+    width: 100%;
+  }
 
-.historical-data {
-  flex-direction: column;
-  gap: 10px;
-}
+  .historical-data {
+    flex-direction: column;
+    gap: 10px;
+  }
 
-.favorite-buttons {
-  justify-content: center;
-}
+  .favorite-buttons {
+    justify-content: center;
+  }
+
+  /* Fee Controls */
+  .fee-controls {
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(10px);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #2d3748;
+  }
+
+  .fee-toggle {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-bottom: 15px;
+  }
+
+  .toggle-slider {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 24px;
+    background: #cbd5e0;
+    border-radius: 24px;
+    transition: all 0.3s ease;
+  }
+
+  .toggle-slider:after {
+    content: "";
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: white;
+    top: 2px;
+    left: 2px;
+    transition: all 0.3s ease;
+  }
+
+  input[type="checkbox"] {
+    display: none;
+  }
+
+  input[type="checkbox"]:checked + .toggle-slider {
+    background: #48bb78;
+  }
+
+  input[type="checkbox"]:checked + .toggle-slider:after {
+    transform: translateX(26px);
+  }
+
+  /* Fee Settings */
+  .fee-settings {
+    border-top: 1px solid #e2e8f0;
+    padding-top: 15px;
+  }
+
+  .fee-presets,
+  .fee-custom {
+    margin-bottom: 15px;
+  }
+
+  .fee-presets label,
+  .fee-custom label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #4a5568;
+  }
+
+  .fee-select {
+    width: 100%;
+    padding: 10px;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    background: white;
+    color: #2d3748;
+  }
+
+  .fee-custom {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+  }
+
+  .fee-slider {
+    flex: 1;
+    height: 6px;
+    border-radius: 3px;
+    background: #e2e8f0;
+    outline: none;
+  }
+
+  .fee-slider::-webkit-slider-thumb {
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #667eea;
+    cursor: pointer;
+  }
+
+  .fee-percentage {
+    font-weight: bold;
+    color: #667eea;
+    min-width: 60px;
+  }
+
+  /* Fee Breakdown */
+  .fee-breakdown {
+    margin-top: 20px;
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.6);
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+  }
+
+  .fee-breakdown h4 {
+    color: #2d3748;
+    margin-bottom: 15px;
+    border-bottom: 2px solid #e2e8f0;
+    padding-bottom: 8px;
+  }
+
+  .breakdown-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .breakdown-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 6px;
+  }
+
+  .breakdown-label {
+    font-weight: 600;
+    color: #4a5568;
+  }
+
+  .breakdown-value {
+    font-weight: bold;
+    color: #2d3748;
+  }
+
+  .fee-item {
+    background: rgba(254, 215, 215, 0.3);
+    border-left: 4px solid #fc8181;
+  }
+
+  .total-item {
+    background: rgba(198, 246, 213, 0.3);
+    border-left: 4px solid #48bb78;
+    font-size: 1.1em;
+  }
+
+  /* Fee Comparison */
+  .fee-comparison {
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px solid #e2e8f0;
+  }
+
+  .fee-comparison h5 {
+    color: #2d3748;
+    margin-bottom: 12px;
+  }
+
+  .comparison-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 10px;
+  }
+
+  .comparison-item {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 8px;
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+    cursor: pointer;
+  }
+
+  .comparison-item:hover {
+    border-color: #667eea;
+    transform: translateY(-2px);
+  }
+
+  .comparison-item.selected {
+    border-color: #48bb78;
+    background: rgba(72, 187, 120, 0.1);
+  }
+
+  .service-name {
+    font-weight: 600;
+    color: #2d3748;
+  }
+
+  .service-fee {
+    color: #718096;
+    font-size: 0.9em;
+  }
+
+  .service-amount {
+    font-weight: bold;
+    color: #2d3748;
+    margin-top: 5px;
+  }
+
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .fee-custom {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 10px;
+    }
+
+    .comparison-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .breakdown-item {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 5px;
+    }
+  }
 }

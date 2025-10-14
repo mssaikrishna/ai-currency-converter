@@ -17,7 +17,11 @@
   <div class="examples">
     <p>Or try these examples:</p>
     <div class="example-buttons">
-      <button *ngFor="let example of examples" (click)="useExample(example)" class="example-btn">
+      <button
+        *ngFor="let example of examples"
+        (click)="useExample(example)"
+        class="example-btn"
+      >
         {{ example }}
       </button>
     </div>
@@ -25,34 +29,95 @@
 
   <!-- Main Input -->
   <div class="input-group">
-    <input type="text" [(ngModel)]="userQuery" placeholder="e.g. Convert 100 USD to INR, or 50 euros in Japanese yen"
-      (keyup.enter)="handleConvert()" [disabled]="loading" class="query-input" />
+    <input
+      type="text"
+      [(ngModel)]="userQuery"
+      placeholder="e.g. Convert 100 USD to INR, or 50 euros in Japanese yen"
+      (keyup.enter)="handleConvert()"
+      [disabled]="loading"
+      class="query-input"
+    />
 
-    <button (click)="handleConvert()" [disabled]="loading || !userQuery.trim()" class="convert-btn">
-      {{ loading ? '🔄 Converting...' : '💱 Convert' }}
+    <button
+      (click)="handleConvert()"
+      [disabled]="loading || !userQuery.trim()"
+      class="convert-btn"
+    >
+      {{ loading ? "🔄 Converting..." : "💱 Convert" }}
     </button>
   </div>
+  
+  <!-- Fee Controls -->
+  <div class="fee-controls">
+    <label class="fee-toggle">
+      <input type="checkbox" [(ngModel)]="showFees" (change)="toggleFees()" />
+      <span class="toggle-slider"></span>
+      💰 Include Conversion Fees
+    </label>
 
-  <!-- Action Buttons - MOVE THIS UP -->
+    <div *ngIf="showFees" class="fee-settings">
+      <div class="fee-presets">
+        <label>Fee Type:</label>
+        <select
+          [(ngModel)]="selectedFeeType"
+          (change)="onFeeTypeChange()"
+          class="fee-select"
+        >
+          <option *ngFor="let feeType of feeStructureKeys" [value]="feeType">
+            {{ feeType }} ({{ feeStructures[feeType] }}%)
+          </option>
+        </select>
+      </div>
+
+      <div class="fee-custom">
+        <label>Custom Fee (%):</label>
+        <input
+          type="range"
+          min="0"
+          max="10"
+          step="0.1"
+          [(ngModel)]="feePercentage"
+          class="fee-slider"
+          (input)="handleConvert()"
+        />
+        <span class="fee-percentage">{{ feePercentage }}%</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Action Buttons -->
   <div class="action-buttons" *ngIf="userQuery.trim() && !loading">
-    <button (click)="convertToAllPopular()" class="action-btn" [disabled]="loading">
+    <button
+      (click)="convertToAllPopular()"
+      class="action-btn"
+      [disabled]="loading"
+    >
       🔄 Convert to All Popular
     </button>
     <button (click)="toggleCalculator()" class="action-btn">
-      🧮 {{ showCalculator ? 'Close' : 'Open' }} Calculator
+      🧮 {{ showCalculator ? "Close" : "Open" }} Calculator
     </button>
-    <button (click)="showHistoricalChart(parsed?.from || 'USD', parsed?.to || 'EUR')" 
-            class="action-btn" 
-            *ngIf="parsed">
+    <button
+      (click)="showHistoricalChart(parsed?.from || 'USD', parsed?.to || 'EUR')"
+      class="action-btn"
+      *ngIf="parsed"
+    >
       📈 View History
     </button>
   </div>
 
   <!-- Favorites Section -->
-  <div class="favorites-section" *ngIf="favorites.length > 0 && userQuery.trim()">
+  <div
+    class="favorites-section"
+    *ngIf="favorites.length > 0 && userQuery.trim()"
+  >
     <h3>⭐ Your Favorites</h3>
     <div class="favorite-buttons">
-      <button *ngFor="let fav of favorites" (click)="convertToMultiple(fav)" class="favorite-btn">
+      <button
+        *ngFor="let fav of favorites"
+        (click)="convertToMultiple(fav)"
+        class="favorite-btn"
+      >
         {{ currencyInfo[fav].flag }} {{ fav }}
       </button>
     </div>
@@ -62,7 +127,11 @@
   <div *ngIf="userQuery.trim() && !loading" class="popular-currencies">
     <p>Convert to popular currencies:</p>
     <div class="currency-buttons">
-      <button *ngFor="let currency of popularCurrencies" (click)="convertToMultiple(currency)" class="currency-btn">
+      <button
+        *ngFor="let currency of popularCurrencies"
+        (click)="convertToMultiple(currency)"
+        class="currency-btn"
+      >
         {{ currency }}
       </button>
     </div>
@@ -72,22 +141,103 @@
   <div *ngIf="showCalculator" class="calculator">
     <h3>🧮 Currency Calculator</h3>
     <div class="calculator-inputs">
-      <input type="number" [(ngModel)]="calculatorFromAmount" (input)="updateCalculator()" class="calc-input">
-      <select [(ngModel)]="calculatorFromCurrency" (change)="updateCalculator()" class="calc-select">
-        <option *ngFor="let curr of popularCurrencies" [value]="curr">{{ curr }}</option>
+      <input
+        type="number"
+        [(ngModel)]="calculatorFromAmount"
+        (input)="updateCalculator()"
+        class="calc-input"
+      />
+      <select
+        [(ngModel)]="calculatorFromCurrency"
+        (change)="updateCalculator()"
+        class="calc-select"
+      >
+        <option *ngFor="let curr of popularCurrencies" [value]="curr">
+          {{ curr }}
+        </option>
       </select>
       <button (click)="swapCalculatorCurrencies()" class="swap-btn">⇄</button>
-      <input type="number" [(ngModel)]="calculatorToAmount" readonly class="calc-input">
-      <select [(ngModel)]="calculatorToCurrency" (change)="updateCalculator()" class="calc-select">
-        <option *ngFor="let curr of popularCurrencies" [value]="curr">{{ curr }}</option>
+      <input
+        type="number"
+        [(ngModel)]="calculatorToAmount"
+        readonly
+        class="calc-input"
+      />
+      <select
+        [(ngModel)]="calculatorToCurrency"
+        (change)="updateCalculator()"
+        class="calc-select"
+      >
+        <option *ngFor="let curr of popularCurrencies" [value]="curr">
+          {{ curr }}
+        </option>
       </select>
     </div>
   </div>
 
-  <!-- Results -->
+  <!-- SINGLE RESULTS SECTION - Remove duplicates -->
   <div *ngIf="result" class="result success">
     <h3>{{ result }}</h3>
     <p class="rate-info">{{ detailedResult }}</p>
+
+    <!-- Fee Breakdown -->
+    <div *ngIf="feeConversionResult && showFees" class="fee-breakdown">
+      <h4>💵 Fee Breakdown</h4>
+      <div class="breakdown-grid">
+        <div class="breakdown-item">
+          <span class="breakdown-label">Original Amount:</span>
+          <span class="breakdown-value"
+            >{{ parsed?.amount }} {{ parsed?.from }}</span
+          >
+        </div>
+        <div class="breakdown-item">
+          <span class="breakdown-label">Exchange Rate:</span>
+          <span class="breakdown-value"
+            >1 {{ parsed?.from }} = {{ feeConversionResult.rate.toFixed(4) }}
+            {{ parsed?.to }}</span
+          >
+        </div>
+        <div class="breakdown-item">
+          <span class="breakdown-label">Gross Amount:</span>
+          <span class="breakdown-value"
+            >{{ formatCurrency(feeConversionResult.converted, parsed?.to) }}
+            {{ parsed?.to }}</span
+          >
+        </div>
+        <div class="breakdown-item fee-item">
+          <span class="breakdown-label">Fee ({{ feePercentage }}%):</span>
+          <span class="breakdown-value"
+            >-{{ formatCurrency(feeConversionResult.feeAmount, parsed?.to) }}
+            {{ parsed?.to }}</span
+          >
+        </div>
+        <div class="breakdown-item total-item">
+          <span class="breakdown-label">Net Amount:</span>
+          <span class="breakdown-value"
+            >{{ formatCurrency(feeConversionResult.netAmount, parsed?.to) }}
+            {{ parsed?.to }}</span
+          >
+        </div>
+      </div>
+
+      <!-- Fee Comparison -->
+      <div class="fee-comparison">
+        <h5>💡 Compare with other services:</h5>
+        <div class="comparison-grid">
+          <div
+            *ngFor="let service of feeStructureKeys"
+            class="comparison-item"
+            [class.selected]="selectedFeeType === service"
+          >
+            <span class="service-name">{{ service }}</span>
+            <span class="service-fee">{{ feeStructures[service] }}%</span>
+            <span class="service-amount">
+              {{ calculateServiceAmount(service) }} {{ parsed?.to }}
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- Multiple Results Table -->
@@ -95,9 +245,16 @@
     <h3>💱 All Popular Conversions</h3>
     <table>
       <tr *ngFor="let result of multipleResults">
-        <td><strong>{{ result.currency }}</strong> ({{ result.name }})</td>
-        <td><strong>{{ result.converted.toFixed(2) }}</strong></td>
-        <td class="rate">1 {{ parsed?.from }} = {{ result.rate.toFixed(4) }} {{ result.currency }}</td>
+        <td>
+          <strong>{{ result.currency }}</strong> ({{ result.name }})
+        </td>
+        <td>
+          <strong>{{ result.converted.toFixed(2) }}</strong>
+        </td>
+        <td class="rate">
+          1 {{ parsed?.from }} = {{ result.rate.toFixed(4) }}
+          {{ result.currency }}
+        </td>
       </tr>
     </table>
   </div>
@@ -108,8 +265,18 @@
     <div class="chart-placeholder">
       <p>📊 Chart would display here with data points</p>
       <div class="historical-data" *ngIf="historicalData">
-        <p>Latest rate: <strong>1 {{ parsed?.from }} = {{ historicalData[historicalData.length-1]?.rate }} {{ parsed?.to }}</strong></p>
-        <p>30-day range: {{ historicalData[0]?.rate }} - {{ historicalData[historicalData.length-1]?.rate }}</p>
+        <p>
+          Latest rate:
+          <strong
+            >1 {{ parsed?.from }} =
+            {{ historicalData[historicalData.length - 1]?.rate }}
+            {{ parsed?.to }}</strong
+          >
+        </p>
+        <p>
+          30-day range: {{ historicalData[0]?.rate }} -
+          {{ historicalData[historicalData.length - 1]?.rate }}
+        </p>
       </div>
     </div>
     <button (click)="showChart = false" class="close-btn">Close Chart</button>
@@ -120,10 +287,11 @@
     <h4>ℹ️ Currency Information</h4>
     <p>
       {{ currencyInfo[parsed.from].flag }}
-      1 {{ parsed.from }} ({{ currencyInfo[parsed.from].name }})
-      =
+      1 {{ parsed.from }} ({{ currencyInfo[parsed.from].name }}) =
       {{ currencyInfo[parsed.to].flag }}
-      {{ currentRate.toFixed(4) }} {{ parsed.to }} ({{ currencyInfo[parsed.to].name }})
+      {{ currentRate.toFixed(4) }} {{ parsed.to }} ({{
+        currencyInfo[parsed.to].name
+      }})
     </p>
   </div>
 
@@ -133,7 +301,10 @@
 
   <!-- Supported Currencies Info -->
   <div class="info">
-    <p>💡 <strong>Supported currencies include:</strong> USD, EUR, GBP, JPY, INR, CAD, AUD, CHF, CNY, SGD, NZD, MXN,
-      BRL, RUB, ZAR, AED, SAR, TRY, KRW and 140+ more!</p>
+    <p>
+      💡 <strong>Supported currencies include:</strong> USD, EUR, GBP, JPY, INR,
+      CAD, AUD, CHF, CNY, SGD, NZD, MXN, BRL, RUB, ZAR, AED, SAR, TRY, KRW and
+      140+ more!
+    </p>
   </div>
 </div>
